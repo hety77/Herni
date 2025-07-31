@@ -1,32 +1,185 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Para Vos, Hernán</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hernán, sos el cielo de mis ojos</title>
+
+  <!-- Google Fonts: Rock Salt y Caveat -->
+  <link href="https://fonts.googleapis.com/css2?family=Rock+Salt&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #000;
+      color: #e0e0e0;
+      font-family: 'Caveat', cursive;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .content {
+      text-align: center;
+      z-index: 2;
+      padding: 20px;
+      max-width: 800px;
+    }
+
+    h1 {
+      font-family: 'Rock Salt', cursive;
+      font-size: 4rem;
+      color: #ff3366;
+      text-shadow: 0 0 10px #ff0033, 0 0 20px #ff0033, 0 0 30px #ff0033;
+      letter-spacing: 2px;
+      line-height: 1.4;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+      cursor: default;
+    }
+
+    .heart {
+      color: #ff0033;
+      display: inline-block;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #ff3366;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 30px;
+      font-family: 'Rock Salt', cursive;
+      cursor: pointer;
+      z-index: 10;
+      box-shadow: 0 0 10px #ff0033;
+      transition: all 0.3s;
+    }
+
+    .music-btn:hover {
+      background: #ff0033;
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<header>
-<h1 class="title">🎸 Para Mi Rollinga Sucio 🖤</h1>
-</header>
-<main class="love-message">
-<div class="heart-beat">
-<svg viewBox="0 0 32 29.6">
-<path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z"/>
-</svg>
-</div>
-<p class="main-text">Hernán,</p>
-<p class="sky-eyes">Sos el cielo de mis ojos,</p>
-<p class="rollinga-phrase">rolinga sucio.</p>
-</main>
-<footer>
-<p class="footer-text">Con todo mi rock and roll y mi amor.</p>
-</footer>
-</div>
-<div class="background-overlay"></div>
-<script src="script.js"></script>
+
+  <div id="particles-js"></div>
+
+  <div class="content">
+    <h1 id="rock-text">
+      Hernán, sos el cielo de mis ojos, <span class="heart">❤️</span> rollingsa sucio.
+    </h1>
+  </div>
+
+  <!-- Botón de música (opcional) -->
+  <button class="music-btn" onclick="toggleMusic()">🎵</button>
+
+  <audio id="bg-music" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    // Configuración de Particles.js
+    particlesJS("particles-js", {
+      particles: {
+        number: { value: 80, density: { enable: true, area: 800 } },
+        color: { value: "#ff0033" },
+        shape: { type: "circle" },
+        opacity: { value: 0.7, random: true },
+        size: { value: 3, random: true },
+        move: {
+          enable: true,
+          speed: 2,
+          direction: "none",
+          random: true,
+          straight: false,
+          out_mode: "out"
+        }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: {
+          onhover: { enable: true, mode: "repulse" },
+          onclick: { enable: true, mode: "push" }
+        },
+        modes: { repulse: { distance: 100, duration: 0.4 } }
+      },
+      retina_detect: true
+    });
+
+    // Efecto de movimiento al mover el mouse
+    const text = document.getElementById("rock-text");
+    document.addEventListener("mousemove", (e) => {
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+      text.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // Reset transform cuando el mouse sale
+    document.addEventListener("mouseleave", () => {
+      text.style.transform = "rotateY(0deg) rotateX(0deg)";
+    });
+
+    // Control de música
+    const music = document.getElementById("bg-music");
+    music.volume = 0.3; // Volumen bajo
+    let musicPlaying = false;
+
+    function toggleMusic() {
+      if (musicPlaying) {
+        music.pause();
+        musicPlaying = false;
+        document.querySelector(".music-btn").textContent = "🎵";
+      } else {
+        music.play().catch(e => alert("La reproducción automática está bloqueada. Por favor, interactúa con la página primero."));
+        musicPlaying = true;
+        document.querySelector(".music-btn").textContent = "🔊";
+      }
+    }
+
+    // Animación de entrada
+    text.style.opacity = "0";
+    text.style.transform += " translateY(30px)";
+    setTimeout(() => {
+      text.style.transition = "all 1s ease";
+      text.style.opacity = "1";
+      text.style.transform = "rotateY(0deg) rotateX(0deg)";
+    }, 300);
+  </script>
+
 </body>
 </html>
